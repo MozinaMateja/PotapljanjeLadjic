@@ -23,8 +23,8 @@ prazno_polje = polje(vrstice, stolpci)
 def nakljucni_indeks(v, s):
     far = []
     while len(far) < stevilo_ladjic:
-        a = random.randint(0, vrstice - 1)
-        b = random.randint(0, stolpci - 1)
+        a = random.randint(1, vrstice)
+        b = random.randint(1, stolpci)
         if [a, b] not in far:
             far.append([a, b])
     return far
@@ -34,7 +34,7 @@ def nakljucni_indeks(v, s):
 
 
 class Igra:
-    def __init__(self, seznam_ladij, poskusi=None):
+    def __init__(self, seznam_ladij, poskusi=[]):
         self.seznam_ladij = seznam_ladij
         self.poskusi = poskusi
 
@@ -46,12 +46,15 @@ class Igra:
         return [poskus for poskus in self.poskusi if poskus in self.seznam_ladij]
         # seznam dvoenotnih seznamov
 
+    def stevilo_pravilnih(self):
+        return len(self.pravilni_ugibi())
+
     def stevilo_napacnih(self):
-        return len(self.napacni_ugibi)
+        return len(self.napacni_ugibi())
         # stevilka
 
     def poraz(self):
-        return self.stevilo_napacnih > st_dovoljenih_napak
+        return self.stevilo_napacnih() >= st_dovoljenih_napak
         # T, ce velja ^
 
     def potop(self):
@@ -66,9 +69,9 @@ class Igra:
         odkrito_polje = prazno_polje
         for i in self.poskusi:
             if i in self.seznam_ladij: #zadel
-                odkrito_polje[i[0]][i[1]] == "X"
+                odkrito_polje[i[0] - 1][i[1] - 1] == "X"
             else: #zgrešil
-                odkrito_polje[i[0]][i[1]] == "_"
+                odkrito_polje[i[0] - 1][i[1] - 1] == "_"
         return odkrito_polje
 
     def ugibaj(self, ugib):
@@ -89,7 +92,16 @@ class Igra:
                 else:
                     return "napačni ugib"
 
-igra = Igra(nakljucni_indeks(vrstice, stolpci))
+    def narejeno_polje(self, odkrito_polje):
+        niz = ""
+        for i in odkrito_polje:
+             niz += " ".join(i)
+             niz += " \n"
+        return niz
+
+def nova_igra():
+    return Igra(nakljucni_indeks(vrstice, stolpci))
+
 
 
 
