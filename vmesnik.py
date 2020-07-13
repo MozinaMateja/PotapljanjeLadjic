@@ -1,4 +1,3 @@
-
 import model
 
 def izpis_igre(igra):
@@ -34,6 +33,14 @@ def izpis_poraza(igra):
     )
     return tekst 
 
+def izpis_napake():
+    tekst = (
+        "::::::::Vnesi številko vrstice, številko stolpca (med 1 in {stevilo})!::::::::\n"
+    ).format(
+        stevilo=model.vrstice
+    )
+    return tekst
+
 
 def vnos_vrstice_in_stolpca():
     return input("Vrstica, stolpec(loči z vejico): ").split(',')
@@ -46,14 +53,24 @@ def pozeni_vmesnik():
     while True:
         print(izpis_igre(igra))
         poskus = vnos_vrstice_in_stolpca()
-        poskus_seznam = [int(x) for x in poskus]
-        igra.ugibaj(poskus_seznam)
-        if igra.potop():
+        poskus_seznam = [int(x) for x in poskus if x in model.seznam_mest]
+        asdf = igra.ugibaj(poskus_seznam)
+        if asdf == model.PREMAJHEN_PREVELIK:
+            print(izpis_napake())
+        elif asdf == model.ZMAGA:
             print(izpis_zmage(igra))
-            break
-        elif igra.poraz():
+            ponovni_zagon = input("Za ponovni zagon vpišite R. ").strip()
+            if ponovni_zagon == "R" or ponovni_zagon == "r":
+                igra = model.nova_igra()
+            else:
+                break
+        elif asdf == model.PORAZ:
             print(izpis_poraza(igra))
-            break
+            ponovni_zagon = input("Za ponovni zagon vpišite R. ").strip()
+            if ponovni_zagon == "R" or ponovni_zagon == "r":
+                igra = model.nova_igra()
+            else:
+                break
 
 
 pozeni_vmesnik()

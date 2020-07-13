@@ -6,8 +6,17 @@ stevilo_ladjic = 10
 st_dovoljenih_napak = 20
 vrstice = 10
 stolpci = 10
+seznam_mest = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+PRAVILNI_UGIB = "+"
+PONOVLJENI_UGIB = "R"
+PREMAJHEN_PREVELIK = ">"
+NI_STEVILKA = "#"
+NAPACNI_UGIB = "-"
+ZMAGA = "W"
+PORAZ = "L"
 
-# w
+
+#sestavi polje 10×10
 def polje(v, s):
     polje1 = []
     for i in range(v):
@@ -19,7 +28,8 @@ def polje(v, s):
 
 prazno_polje = polje(vrstice, stolpci)
 
-#w
+
+#iz polja izbere naključne pare indeksov in jih vrne kot seznam seznamov
 def nakljucni_indeks(v, s):
     far = []
     while len(far) < stevilo_ladjic:
@@ -40,57 +50,57 @@ class Igra:
 
     def napacni_ugibi(self):
         return [poskus for poskus in self.poskusi if poskus not in self.seznam_ladij]
-        # seznam dvoenotnih seznamov
+        # seznam seznamov vseh ugibov kjer ni ladjic
 
     def pravilni_ugibi(self):
         return [poskus for poskus in self.poskusi if poskus in self.seznam_ladij]
-        # seznam dvoenotnih seznamov
+        # seznam seznamov vseh ugibov kjer so ladjice
 
     def stevilo_pravilnih(self):
         return len(self.pravilni_ugibi())
+        # število najdenih ladjic
 
     def stevilo_napacnih(self):
         return len(self.napacni_ugibi())
-        # stevilka
+        # stevilo praznih polj
 
     def poraz(self):
         return self.stevilo_napacnih() >= st_dovoljenih_napak
-        # T, ce velja ^
 
     def potop(self):
         for i in self.seznam_ladij:
             if i not in self.poskusi:
                 return False
         return True
-        # T / F
     #zmaga
 
     def delno_pravilno(self):
         odkrito_polje = prazno_polje
         for i in self.poskusi:
             if i in self.seznam_ladij: #zadel
-                odkrito_polje[i[0] - 1][i[1] - 1] == "X"
+                odkrito_polje[i[0] - 1][i[1] - 1] = "X"
             else: #zgrešil
-                odkrito_polje[i[0] - 1][i[1] - 1] == "_"
+                odkrito_polje[i[0] - 1][i[1] - 1] = "_"
         return odkrito_polje
+        # vrne polje 10×10 kjer so potopljene ladjice označene z X, zgrešena mesta z _
 
     def ugibaj(self, ugib):
         if len(ugib) != 2:
-            return "prevelik / premajhen ugib"
-        if ugib in self.poskusi:
-            return "ponovljen poskus"
+            return PREMAJHEN_PREVELIK
+        elif ugib in self.poskusi:
+            return PONOVLJENI_UGIB
         else:
             self.poskusi.append(ugib)
             if ugib in self.seznam_ladij:
                 if self.potop():
-                    return "zmagal si"
+                    return ZMAGA
                 else:
-                    return "pravilni ugib"
+                    return PRAVILNI_UGIB
             else:
                 if self.poraz():
-                    return "izgubil si"
+                    return PORAZ
                 else:
-                    return "napačni ugib"
+                    return NAPACNI_UGIB
 
     def narejeno_polje(self, odkrito_polje):
         niz = ""
@@ -98,51 +108,10 @@ class Igra:
              niz += " ".join(i)
              niz += " \n"
         return niz
+        # vsako element v vrstici združi s presledkom in na koncu doda \n
 
 def nova_igra():
     return Igra(nakljucni_indeks(vrstice, stolpci))
 
-
-
-
-
-    
-
-
-
-# #while vrstice not in range(5, 11):
-# #    vrstice = input("Število vrstic: ")
-# #
-# #while stolpci not in range(5, 11):
-# #    stolpci = input("Število stolpcev: ")
-# 
-# while stevilo_napak not in range(1, 31):
-#     stevilo_napak = input("Število napak: ")
-
-
-#class Ladje:
-#    def __init__(self, vrs, sto):
-#        self.vrs = vrs
-#        self.sto = sto
-#
-#    def nakljucna_vrstica(self):
-#        return random.randint(0, self.vrs - 1)
-#
-#    def nakljucni_stolpec(self):
-#        return random.randint(0, self.sto - 1)
-# 
-##    def ladjice(self, polje1):
-##        for i in range(stevilo_ladjic):
-##            pass
-##w
-#def put_one(seznam_seznamov):
-#    asd = [1] * stevilo_ladjic
-#    while len(asd) > 0:
-#        a = random.randint(0, 9)
-#        b = random.randint(0, 9)
-#        if seznam_seznamov[a][b] == 0:
-#            seznam_seznamov[a][b] = asd[0]
-#            asd = asd[1:]
-#    return seznam_seznamov
 
 
