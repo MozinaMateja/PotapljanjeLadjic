@@ -44,9 +44,12 @@ def nakljucni_indeks(v, s):
 
 
 class Igra:
-    def __init__(self, seznam_ladij, poskusi=[]):
+    def __init__(self, seznam_ladij, poskusi=None):
         self.seznam_ladij = seznam_ladij
-        self.poskusi = poskusi
+        if poskusi is None: 
+            self.poskusi = []
+        else:
+            self.poskusi = poskusi
 
     def napacni_ugibi(self):
         return [poskus for poskus in self.poskusi if poskus not in self.seznam_ladij]
