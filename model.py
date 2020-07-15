@@ -24,9 +24,7 @@ def polje(v, s):
         for j in range(s):
             vrstica.append("O")
         polje1.append(vrstica)
-    return polje1 
-
-prazno_polje = polje(vrstice, stolpci)
+    return polje1
 
 
 #iz polja izbere naključne pare indeksov in jih vrne kot seznam seznamov
@@ -46,7 +44,7 @@ def nakljucni_indeks(v, s):
 class Igra:
     def __init__(self, seznam_ladij, poskusi=None):
         self.seznam_ladij = seznam_ladij
-        if poskusi is None: 
+        if poskusi is None:
             self.poskusi = []
         else:
             self.poskusi = poskusi
@@ -78,7 +76,7 @@ class Igra:
     #zmaga
 
     def delno_pravilno(self):
-        odkrito_polje = prazno_polje
+        odkrito_polje = polje(vrstice, stolpci)
         for i in self.poskusi:
             if i in self.seznam_ladij: #zadel
                 odkrito_polje[i[0] - 1][i[1] - 1] = "X"
