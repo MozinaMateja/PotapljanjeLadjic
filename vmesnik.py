@@ -6,14 +6,11 @@ def izpis_igre(igra):
         "=================================================\n"
         "Število preostalih preizkusov: {stevilo_preostalih_poskusov} \n"
         "Poskusi: {ugibani}\n"
-        "Število potopljenih ladjic: {stevilo_potopljenih} od {stevilo_iskanih}\n"
         "================================================="
     ).format(
         polje=igra.narejeno_polje(igra.delno_pravilno()),
         stevilo_preostalih_poskusov=model.st_dovoljenih_napak - igra.stevilo_napacnih(),
-        ugibani=igra.poskusi,
-        stevilo_potopljenih=igra.stevilo_pravilnih(),
-        stevilo_iskanih=model.stevilo_ladjic
+        ugibani=igra.poskusi
     )
     return tekst
 
@@ -60,14 +57,14 @@ def pozeni_vmesnik():
         elif asdf == model.ZMAGA:
             print(izpis_zmage(igra))
             ponovni_zagon = input("Za ponovni zagon vpišite R. ").strip()
-            if ponovni_zagon == "R" or ponovni_zagon == "r":
+            if ponovni_zagon.strip().lower() == "r":
                 igra = model.nova_igra()
             else:
                 break
         elif asdf == model.PORAZ:
             print(izpis_poraza(igra))
             ponovni_zagon = input("Za ponovni zagon vpišite R. ").strip()
-            if ponovni_zagon == "R" or ponovni_zagon == "r":
+            if ponovni_zagon.strip().lower() == "r":
                 igra = model.nova_igra()
             else:
                 break

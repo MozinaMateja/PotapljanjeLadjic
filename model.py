@@ -6,6 +6,7 @@ stevilo_ladjic = 10
 st_dovoljenih_napak = 20
 vrstice = 10
 stolpci = 10
+seznam_ladij = [5, 4, 3, 3, 2]
 seznam_mest = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 PRAVILNI_UGIB = "+"
 PONOVLJENI_UGIB = "R"
@@ -27,15 +28,33 @@ def polje(v, s):
     return polje1
 
 
-#iz polja izbere naključne pare indeksov in jih vrne kot seznam seznamov
-def nakljucni_indeks(v, s):
+#iz polja izbere naključne pare indeksov in jih vrne kot seznam seznamov (int med 1 in 10)
+def nakljucni_indeks(v, s, seznam):
     far = []
-    while len(far) < stevilo_ladjic:
-        a = random.randint(1, vrstice)
-        b = random.randint(1, stolpci)
-        if [a, b] not in far:
-            far.append([a, b])
+    seznam1 = seznam
+    while len(seznam1) > 0:
+        for x in seznam1:
+            a = random.randint(0, 1)
+            if a == 0:   #vodoravno
+                b = random.randint(1, v)
+                c = random.randint(1, s - x + 1)
+                if all([b, c + i] not in far for i in range(x)):
+                    seznam1.remove(x)
+                    for i in range(x):
+                        far.append([b, c + i])
+                else:
+                    continue
+            else:   #navpično
+                b = random.randint(1, v - x + 1)
+                c = random.randint(1, s)
+                if all([b + i, c] not in far for i in range(x)):
+                    seznam1.remove(x)
+                    for i in range(x):
+                        far.append([b + i, c])
+                else:
+                    continue
     return far
+
 
 # seznam_ladij = nakljucni_indeks(vrstice, stolpci)
 
@@ -112,7 +131,14 @@ class Igra:
         # vsako element v vrstici združi s presledkom in na koncu doda \n
 
 def nova_igra():
-    return Igra(nakljucni_indeks(vrstice, stolpci))
+    return Igra(nakljucni_indeks(vrstice, stolpci, seznam_ladij))
 
 
-
+#def nakljucni_indeks(v, s):
+#    far = []
+#    while len(far) < stevilo_ladjic:
+#        a = random.randint(1, vrstice)
+#        b = random.randint(1, stolpci)
+#        if [a, b] not in far:
+#            far.append([a, b])
+#    return far
