@@ -2,12 +2,12 @@
 import random
 
 
-stevilo_ladjic = 10
-st_dovoljenih_napak = 20
+st_dovoljenih_napak = 40
 vrstice = 10
 stolpci = 10
-seznam_ladij = [5, 4, 3, 3, 2]
+slovar_ladij = {"Letalonosilka": 5, "Bojna ladja": 4, "Podmornica": 3,"Križarka": 3, "Rušilec": 2}
 seznam_mest = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+ZACETEK = "B"
 PRAVILNI_UGIB = "+"
 PONOVLJENI_UGIB = "R"
 PREMAJHEN_PREVELIK = ">"
@@ -29,9 +29,11 @@ def polje(v, s):
 
 
 #iz polja izbere naključne pare indeksov in jih vrne kot seznam seznamov (int med 1 in 10)
-def nakljucni_indeks(v, s, seznam):
+def nakljucni_indeks(v, s, slovar_l):
+    seznam1 = []
+    for i, j in slovar_l.items():
+        seznam1.append(slovar_l[i])
     far = []
-    seznam1 = seznam
     while len(seznam1) > 0:
         for x in seznam1:
             a = random.randint(0, 1)
@@ -56,7 +58,6 @@ def nakljucni_indeks(v, s, seznam):
     return far
 
 
-# seznam_ladij = nakljucni_indeks(vrstice, stolpci)
 
 
 
@@ -131,14 +132,26 @@ class Igra:
         # vsako element v vrstici združi s presledkom in na koncu doda \n
 
 def nova_igra():
-    return Igra(nakljucni_indeks(vrstice, stolpci, seznam_ladij))
+    return Igra(nakljucni_indeks(vrstice, stolpci, slovar_ladij))
 
 
-#def nakljucni_indeks(v, s):
-#    far = []
-#    while len(far) < stevilo_ladjic:
-#        a = random.randint(1, vrstice)
-#        b = random.randint(1, stolpci)
-#        if [a, b] not in far:
-#            far.append([a, b])
-#    return far
+class Igre:
+    def __init__(self):
+        self.slovar = {}
+
+    def novi_id(self):
+        if len(self.slovar) == 0:  #če je slovar prazen
+            return 0
+        else:                      #naslednja številka
+            return max(self.slovar.keys()) + 1
+
+    def nova_igra(self):
+        igra = nova_igra()
+        id_igre = self.novi_id()
+        self.slovar[id_igre] = (igra, ZACETEK) #slovar = {"id": (igra, zacetek)}
+        return id_igre
+
+    def ugibaj(self, id_igre, seznam):
+        igra = self.slovar[id_igre][0]
+        ugib = igra.ugibaj(seznam)
+        self.slovar[id_igre] = (igra, ugib)  #slovar = {"id": (igra, ugib)}
