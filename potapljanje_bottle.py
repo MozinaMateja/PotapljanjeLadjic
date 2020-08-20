@@ -1,6 +1,7 @@
 import bottle 
 import model
 
+SKRIVNOST = "skrivnost"
 potapljanje = model.Igre()
 
 
@@ -8,23 +9,25 @@ potapljanje = model.Igre()
 def prva():
     return bottle.template('prva.tpl')
 
-
-@bottle.post('/igra/')
+@bottle.post('/nova_igra/')
 def nova_igra():
     id_igre = potapljanje.nova_igra()
-    bottle.redirect('/igra/{}/'.format(id_igre))
+    bottle.response.set_cookie("idigre", id_igre, secret=SKRIVNOST, path='/')
+    bottle.redirect('/igra/')
 
 
-@bottle.get('/igra/<id_igre:int>/')
-def naredi(id_igre):
+@bottle.get('/igra/')
+def naredi():
+    id_igre = bottle.request.get_cookie('idigre', secret=SKRIVNOST)
     igra, ugib = potapljanje.slovar[id_igre]
-    return bottle.template('igra.tpl', id_igre=id_igre, igra=igra, ugib=ugib)
+    return bottle.template('igra.tpl', igra=igra, ugib=ugib)
 
-@bottle.post('/igra/<id_igre:int>/')
-def ugibaj(id_igre):
+@bottle.post('/igra/')
+def ugibaj():
+    id_igre = bottle.request.get_cookie('idigre', secret=SKRIVNOST)
     mesto = [int(bottle.request.forms['vrstica']), int(bottle.request.forms['stolpec'])]
     potapljanje.ugibaj(id_igre, mesto)
-    bottle.redirect('/igra/{}/'.format(id_igre))
+    bottle.redirect('/igra/')
 
 bottle.run(debug=True, reloader=True)
 

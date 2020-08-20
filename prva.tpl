@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="sl">
-<head>
-    <meta charset="utf-8"/>
-    <title>Potapljanje ladjic</title>
-</head>
-
-<body>
+%rebase("base.tpl", title="prva")
     <h1>Potapljanje ladjic</h1>
-    <form action="/igra/" method=post>
+    <form action="/nova_igra/" method=post>
         <button type="submit">Nova igra</button>
     </form>
-</body>
-</html>
