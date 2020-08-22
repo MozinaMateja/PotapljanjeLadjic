@@ -1,6 +1,6 @@
 
 import random
-
+import json
 
 st_dovoljenih_napak = 40
 vrstice = 10
@@ -136,8 +136,9 @@ def nova_igra():
 
 
 class Igre:
-    def __init__(self):
+    def __init__(self, datoteka_s_stanjem):
         self.slovar = {}
+        self.datoteka_s_stanjem = datoteka_s_stanjem
 
     def novi_id(self):
         if len(self.slovar) == 0:  #če je slovar prazen
@@ -146,12 +147,29 @@ class Igre:
             return max(self.slovar.keys()) + 1
 
     def nova_igra(self):
+        self.nalozi()
         igra = nova_igra()
         id_igre = self.novi_id()
         self.slovar[id_igre] = (igra, ZACETEK) #slovar = {"id": (igra, zacetek)}
+        self.zapisi()
         return id_igre
 
     def ugibaj(self, id_igre, seznam):
+        self.nalozi()
         igra = self.slovar[id_igre][0]
         ugib = igra.ugibaj(seznam)
         self.slovar[id_igre] = (igra, ugib)  #slovar = {"id": (igra, ugib)}
+        self.zapisi()
+        
+    def zapisi(self):
+        with open(self.datoteka_s_stanjem, "w", encoding="utf-8") as f:
+            slovar2 = {id_igre: ((igra.seznam_ladij, igra.poskusi), ugib)
+                for id_igre, (igra, ugib) in self.slovar.items()}
+            json.dump(slovar2, f)
+        return
+
+    def nalozi(self):
+        with open(self.datoteka_s_stanjem, "r", encoding="utf-8") as f:
+            slovar = json.load(f)
+            self.slovar = {int(id_igre): (Igra(seznam_ladij, poskusi), ugib)
+                for id_igre, ((seznam_ladij, poskusi), ugib) in slovar.items()}
