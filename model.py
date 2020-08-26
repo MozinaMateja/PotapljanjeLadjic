@@ -131,6 +131,13 @@ class Igra:
         return niz
         # vsako element v vrstici združi s presledkom in na koncu doda \n
 
+    def resitev(self):
+        prazna_mreza = polje(vrstice, stolpci)
+        for i in self.seznam_ladij:
+            prazna_mreza[i[0] - 1][i[1] - 1] = "X"
+        return prazna_mreza
+
+
 def nova_igra():
     return Igra(nakljucni_indeks(vrstice, stolpci, slovar_ladij))
 

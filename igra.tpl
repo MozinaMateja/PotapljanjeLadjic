@@ -19,7 +19,16 @@
 </form>
 
 %elif ugib == model.PORAZ: 
-<h2>Ladjice so se skrivale na: {{igra.seznam_ladij}}</h2>
+<h2>Ladjice so se skrivale na: </h2>
+<table>
+    %for i in range(len(igra.resitev())):
+    <tr>
+        %for j in range(len(igra.resitev()[0])):
+        <td>{{igra.resitev()[i][j]}}</td>
+        %end
+    </tr>
+    %end
+</table>
 <h1>IZGUBIL SI. POSKUSI PONOVNO?</h1>
 <form action="/nova_igra/" method="post">
     <button type="submit">Nova igra</button>
